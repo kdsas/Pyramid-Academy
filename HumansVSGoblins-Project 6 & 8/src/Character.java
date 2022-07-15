@@ -1,9 +1,6 @@
-import java.io.File;
-import java.net.URL;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
 import javax.imageio.ImageIO;
+import java.awt.*;
+import java.net.URL;
 public abstract class Character {
 
 
@@ -44,7 +41,7 @@ public abstract class Character {
         }
         catch(Exception e)
         {
-            //feel free to do something here, this is mainly useful if you aren't getting your ship to show up
+            //feel free to do something here, this is mainly useful if you aren't getting your human character to show up
         }
     }
 

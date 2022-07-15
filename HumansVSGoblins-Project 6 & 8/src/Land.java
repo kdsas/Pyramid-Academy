@@ -22,6 +22,10 @@ public class Land {
     static JLabel lab1,lab2,lab3, lab4, lab5;
     private static String inv[] = {"","","","",""};
     // The method to set up
+
+    boolean gameOver=false;
+    //ImageIcon logo = new ImageIcon("res/goblin.png");
+    static ImageIcon logo = new ImageIcon(Land.class.getClassLoader().getResource("res/goblin.png"));
     public Land() {
 
         frame = new JFrame("Humans vs Goblins");
@@ -29,6 +33,7 @@ public class Land {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // the event that triggers the end of the program
         frame.setPreferredSize(frame.getSize());
         frame.add(new showGraphics(frame.getSize())); // Setting up the DrawBars public class function (getting bars and
+        frame.setIconImage(logo.getImage());
         // putting it in this frame
 
         healthBarPanel = new JPanel();
@@ -43,7 +48,7 @@ public class Land {
         frame.add(optionsPanel, BorderLayout.EAST);
 
         goblinPanel = new JPanel();
-        goblinPanel.setPreferredSize(new Dimension(100, 30));
+        goblinPanel.setPreferredSize(new Dimension(110, 30));
         goblinPanel.setBackground(Color.red);
         frame.add(goblinPanel, BorderLayout.WEST);
 
@@ -71,11 +76,14 @@ public class Land {
         });
         timer.setRepeats(true);
         timer.start(); // Go go go!
-
+        if(gameOver){
+            timer.stop();
+        }
     }
 
     public void randomGoblinAttack(){
         stealInv();
+
         int goblinDamage=0;
         goblinDamage=new java.util.Random().nextInt(3);
         playerHP=playerHP-goblinDamage;
@@ -120,6 +128,7 @@ public class Land {
             healthBar.setValue(playerHP);
             goblinHP=goblinHP-20;
             lab2.setText("Goblin HP: "+goblinHP);
+
             lab3.setText("Player HP: "+playerHP);
         }
 
@@ -180,9 +189,11 @@ public class Land {
                     b3.hide();
                     if(goblinHP>playerHP){
                         lab1 = new JLabel("Goblin Wins ", JLabel.LEFT);
+                        gameOver=true;
                     }else{
 
                         lab1 = new JLabel("Player Wins ", JLabel.LEFT);
+                        gameOver=true;
                     }
                     lab1.setForeground(Color.RED);
                     optionsPanel.add(lab1);
@@ -205,6 +216,7 @@ public class Land {
     private void addInv(){
 
         b3 = new JButton("Add Inv");
+        b3.setBackground(Color.YELLOW);
         b3.addActionListener(new ActionListener() {
 
             @Override
@@ -229,6 +241,12 @@ public class Land {
                 playerHP=playerHP+10;
                 healthBar.setValue(playerHP);
                 lab3.setText("Player HP: "+playerHP);
+
+                if(playerHP>100){
+
+                    playerHP=100;
+                    lab3.setText("Player HP: " + playerHP);
+                }
             }
         });
         optionsPanel.add(b1);
@@ -238,17 +256,20 @@ public class Land {
     public static void playerSetup(){
      playerHP=100;
      goblinHP=100;
-    healthBar.setValue(playerHP);
+     healthBar.setValue(playerHP);
     lab2 = new JLabel("Goblin HP: "+goblinHP, JLabel.LEFT);
     lab3=new JLabel("Player HP: "+playerHP, JLabel.LEFT);
     goblinPanel.add(lab2);
+    lab2.setFont(new Font("Monospaced", Font.BOLD, 12));
     goblinPanel.add(lab3);
+    lab3.setFont(new Font("Monospaced", Font.BOLD, 12));
 }
     // The main method
     public static void main(String... argv) {
         new Land();
         playerSetup();
         JFrame frame = new JFrame("Instructions");
+        frame.setIconImage(logo.getImage());
         JPanel panel = new JPanel();
         JLabel jlabel = new JLabel("Either press the buttons to the right to fight the Goblins or press your spacebar to shoot the Goblins. You cannot do both at once! If shooting the Goblins with your spacebar, press the 'S' key to restart the game once the Goblins reach the ground.");
         jlabel.setFont(new Font("Verdana",1,10));
